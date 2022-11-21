@@ -1,3 +1,8 @@
+<img width="1340" alt="image" src="https://user-images.githubusercontent.com/485403/203050589-9453f3db-2028-4035-96ef-603613c295f5.png">
+
+This little POC explores the integration of https://github.com/jakezatecky/react-checkbox-tree as a Formik form field.
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
