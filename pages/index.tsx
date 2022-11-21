@@ -156,8 +156,14 @@ export default function Home() {
           }}
         >
           {(props: FormikProps<any>) => (
-            <Form className={styles.form}>
-              <Field type="text" name="firstName" placeholder="First Name" />
+            <Form className={styles.formikForm}>
+              <h1 className="mt-4">Form:</h1>
+              <Field
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                className={styles.fieldWidth}
+              />
 
               <Field
                 type="custom"

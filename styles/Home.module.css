@@ -13,7 +13,11 @@
 }
 
 .cbtField {
-  width: 400px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  width: 550px;
   padding-top: 20px;
   max-width: 30rem;
   margin-bottom: 1rem;
@@ -24,13 +28,24 @@
   flex-direction: column;
   justify-content: space-between;
   margin-top: 15px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 20px 20px 30px 20px;
   background-color: #2bc9be;
 }
 
-.form {
-  padding-top: 40px;
+.formikForm {
+  width: 650px;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #936e9b;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.fieldWidth {
+  width: 200px;
 }
 
 .footer {
