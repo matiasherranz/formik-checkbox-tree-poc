@@ -1,6 +1,134 @@
+/* References:
+ * Custom formik form fields: https://formik.org/docs/api/field#component
+ * Formik form validation: https://formik.org/docs/guides/validation
+ **/
+
 import Head from 'next/head'
-import Image from 'next/image'
+import { useState } from 'react'
+
+import { Field, Form, Formik, FormikProps } from 'formik'
+
+import CheckboxTree from 'react-checkbox-tree'
 import styles from '../styles/Home.module.css'
+import 'react-checkbox-tree/lib/react-checkbox-tree.css'
+
+const nodes = [
+  {
+    value: 'countries',
+    label: 'Countries',
+    children: [
+      {
+        value: 'argentina',
+        label: 'Argentina',
+        children: [
+          {
+            value: 'buenos-aires',
+            label: 'Buenos Aires',
+          },
+          {
+            value: 'cordoba',
+            label: 'Cordoba',
+          },
+        ],
+      },
+      {
+        value: 'usa',
+        label: 'United States',
+        children: [
+          {
+            value: 'new-york',
+            label: 'New York',
+            children: [
+              { value: 'manhattan', label: 'Manhattan' },
+              {
+                value: 'brooklyn',
+                label: 'Brooklyn',
+              },
+            ],
+          },
+          {
+            value: 'florida',
+            label: 'Florida',
+            children: [
+              { value: 'miami', label: 'Miami' },
+              {
+                value: 'naples',
+                label: 'Naples',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+]
+
+const CustomCBTComponent = ({
+  field, // { name, value, onChange, onBlur }
+  form, //: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  ...props
+}) => {
+  const { touched, errors } = form
+
+  const [treeState, setTreeState] = useState<TreeState>({
+    checked: [],
+    expanded: [],
+  })
+
+  return (
+    <div className={styles.cbtField}>
+      <CheckboxTree
+        icons={{
+          check: '☑',
+          uncheck: '☐',
+          halfCheck: '√',
+          expandOpen: '↓',
+          expandClose: '→',
+          expandAll: null,
+          collapseAll: null,
+          parentClose: null,
+          parentOpen: null,
+          leaf: null,
+        }}
+        nodes={nodes}
+        checked={treeState.checked}
+        expanded={treeState.expanded}
+        onCheck={(checked) => {
+          setTreeState((prevState) => ({
+            ...prevState,
+            checked,
+          }))
+
+          form.setValues((prevValues) => ({
+            ...prevValues,
+            checked,
+          }))
+        }}
+        onExpand={(expanded) =>
+          setTreeState((prevState) => ({ ...prevState, expanded }))
+        }
+        showNodeIcon={false}
+      />
+      {touched[field.name] && errors[field.name] && (
+        <div className="error">{errors[field.name]}</div>
+      )}
+
+      <div className={styles.cbtField__values}>
+        <h1 className="mt-4">Selected values:</h1>
+        {JSON.stringify(treeState.checked, null, 2)}
+        <h1 className="mt-4">Expanded values:</h1>
+        {JSON.stringify(treeState.expanded, null, 2)}
+        <h1 className="mt-4">Form values:</h1>
+        {JSON.stringify(form.values, null, 2)}
+      </div>
+    </div>
+  )
+}
+
+interface TreeState {
+  checked: string[]
+  expanded: string[]
+}
 
 export default function Home() {
   return (
@@ -13,59 +141,36 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Formik<a>+React Checkbox Tree</a>
         </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Formik
+          initialValues={{
+            firstName: '',
+          }}
+          onSubmit={(values, actions) => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2))
+              actions.setSubmitting(false)
+            }, 1000)
+          }}
         >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+          {(props: FormikProps<any>) => (
+            <Form className={styles.form}>
+              <Field type="text" name="firstName" placeholder="First Name" />
+
+              <Field
+                type="custom"
+                name="cbtree"
+                component={CustomCBTComponent}
+                placeholder="Checkbox Tree"
+              />
+
+              <button type="submit">Submit</button>
+            </Form>
+          )}
+        </Formik>
+      </main>
     </div>
   )
 }

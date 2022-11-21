@@ -12,6 +12,27 @@
   align-items: center;
 }
 
+.cbtField {
+  width: 400px;
+  padding-top: 20px;
+  max-width: 30rem;
+  margin-bottom: 1rem;
+}
+
+.cbtField__values {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #2bc9be;
+}
+
+.form {
+  padding-top: 40px;
+}
+
 .footer {
   display: flex;
   flex: 1;
