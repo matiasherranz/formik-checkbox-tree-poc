@@ -69,6 +69,8 @@ const CustomCBTComponent = ({
   ...props
 }) => {
   const { touched, errors } = form
+  // TODO: We should use the useField hook here instead
+  // https://formik.org/docs/api/useField
 
   const [treeState, setTreeState] = useState<TreeState>({
     checked: [],
